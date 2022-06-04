@@ -5,8 +5,8 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const indexRouter = require("./routes/index").default;
+const usersRouter = require("./routes/users").default;
 
 const app = express();
 
