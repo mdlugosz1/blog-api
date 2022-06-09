@@ -4,9 +4,10 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv").config();
+require("./config/auth");
 
-const indexRouter = require("./routes/index").default;
-const usersRouter = require("./routes/users").default;
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
 
 const app = express();
 
@@ -40,7 +41,7 @@ app.use(function (err, req, res, next) {
 
 	// render the error page
 	res.status(err.status || 500);
-	res.render("error");
+	res.json(err);
 });
 
 module.exports = app;

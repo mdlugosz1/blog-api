@@ -1,6 +1,6 @@
-import { Schema as model, _Schema } from "mongoose";
+const mongoose = require("mongoose");
 
-const Schema = _Schema;
+const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
 	author: { type: String, required: true },
@@ -8,4 +8,4 @@ const CommentSchema = new Schema({
 	date: Date,
 });
 
-export default model("Comment", CommentSchema);
+module.exports = mongoose.model("Comment", CommentSchema);

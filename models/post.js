@@ -1,6 +1,6 @@
-import mongoose, { Schema as model, _Schema } from "mongoose";
+const mongoose = require("mongoose");
 
-const Schema = _Schema;
+const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
 	author: { type: String },
@@ -11,4 +11,4 @@ const PostSchema = new Schema({
 	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 });
 
-export default model("Post", PostSchema);
+module.exports = mongoose.model("Post", PostSchema);
