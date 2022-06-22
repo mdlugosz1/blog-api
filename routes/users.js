@@ -5,9 +5,7 @@ const passport = require("passport");
 const user_controller = require("../controllers/userController");
 
 /* GET users listing. */
-router.get("/", function (req, res, next) {
-	res.send("respond with a resource");
-});
+router.get("/", user_controller.user_list);
 
 /* Create user */
 router.post("/", user_controller.user_create);
@@ -17,9 +15,16 @@ router.post("/login", user_controller.user_login);
 
 /* Get user profile */
 router.get(
-	"/profile",
+	"/:id/profile",
 	passport.authenticate("jwt", { session: false }),
 	user_controller.user_profile
+);
+
+/* Update user profile */
+router.put(
+	"/:id/profile",
+	passport.authenticate("jwt", { session: false }),
+	user_controller.update_user_profile
 );
 
 module.exports = router;
