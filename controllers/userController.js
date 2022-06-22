@@ -63,7 +63,7 @@ exports.user_login = function (req, res, next) {
 		if (err || !user) {
 			res.status(400).json({
 				code: res.statusCode,
-				msg: "Something went wrong",
+				info,
 			});
 		}
 
@@ -84,3 +84,50 @@ exports.user_login = function (req, res, next) {
 exports.user_profile = function (req, res, next) {
 	res.json(req.user);
 };
+
+exports.user_list = function (req, res, next) {
+	User.find({}, (err, results) => {
+		if (err) {
+			return next(err);
+		}
+
+		res.json(results);
+	});
+};
+
+exports.update_user_profile = [
+	body("firstName").trim().escape(),
+	body("lastName").trim().escape(),
+	body("password").isLength({ min: 8 }),
+	body("confirmPassword").custom((value, { req }) => {
+		if (value !== req.body.password) {
+			throw new Error(`Password doesn't match!`);
+		}
+		return true;
+	}),
+	(req, res, next) => {
+		bcrypt.hash(req.body.password, 10, (err, hash) => {
+			const errors = validationResult(req);
+			const user = {
+				first_name: req.body.firstName,
+				last_name: req.body.lastName,
+				password: hash,
+			};
+
+			if (!errors.isEmpty()) {
+				res.json(errors.mapped());
+			}
+
+			User.findByIdAndUpdate(req.params.id, user, (err) => {
+				if (err) {
+					return next(err);
+				}
+
+				res.status(200).json({
+					code: res.statusCode,
+					msg: "User succesfully updated!",
+				});
+			});
+		});
+	},
+];
